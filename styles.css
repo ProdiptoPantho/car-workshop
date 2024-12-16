@@ -201,3 +201,31 @@ a {
         margin-bottom: 0.5rem;
     }
 }
+
+/* Ensure the body takes up the full height of the viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should expand to fill the available space */
+.landing-container {
+    flex: 1;
+}
+
+.landing-container,
+.login-container {
+    flex: 1;
+}
+
+/* Footer styles */
+footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: var(--shadow);
+}

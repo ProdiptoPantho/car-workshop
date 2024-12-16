@@ -30,12 +30,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <div class="landing-container">
         <div class="content-wrapper">
             <h1>Welcome to Car Workshop</h1>
-            <p>Book your car service appointment online</p>
-            
-            <div class="button-group">
-                <a href="login.php" class="btn btn-primary">Login</a>
-                <a href="register.php" class="btn btn-secondary">Register</a>
-            </div>
+            <p>Book your car service appointment online</p>   
         </div>
     </div>
 

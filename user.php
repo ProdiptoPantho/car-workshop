@@ -51,7 +51,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                 <h2>Book New Appointment</h2>
                 <form id="appointmentForm" action="appointment.php" method="post">
                     <div class="form-group">
-                        <input type="text" name="client_name" value="<?php echo $_SESSION["username"]; ?>" readonly>
+                        <input type="text" name="client_name" value="<?php echo $_SESSION["username"]; ?>">
                     </div>
                     <div class="form-group">
                         <input type="text" name="address" placeholder="Address" required>
@@ -66,7 +66,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                         <input type="text" name="car_engine" placeholder="Car Engine Number" required>
                     </div>
                     <div class="form-group">
-                        <input type="date" name="appointment_date" required min="<?php echo date('Y-m-d'); ?>">
+                        <input type="date" name="appointment_date" required min="<?php echo date('d-m-Y'); ?>">
                     </div>
                     <div class="form-group">
                         <select name="mechanic_id" required>
@@ -93,6 +93,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                             <thead>
                                 <tr>
                                     <th>Date</th>
+                                    <th>Client</th>
                                     <th>Mechanic</th>
                                     <th>Car License</th>
                                     <th>Status</th>
@@ -102,6 +103,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                                 <?php while($appointment = mysqli_fetch_assoc($user_appointments_result)): ?>
                                     <tr>
                                         <td><?php echo $appointment['appointment_date']; ?></td>
+                                        <td><?php echo $appointment['client_name']; ?></td>
                                         <td><?php echo $appointment['mechanic_name']; ?></td>
                                         <td><?php echo $appointment['car_license']; ?></td>
                                         <td><?php echo ucfirst($appointment['status']); ?></td>
@@ -116,6 +118,10 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2024 Car Workshop. All rights reserved.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

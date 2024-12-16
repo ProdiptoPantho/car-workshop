@@ -30,7 +30,7 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
 </head>
 <body>
     <nav class="navbar">
-        <li><a href="index.html" class="btn btn-secondary" id="viewHomeBtn">Home</a></li>
+        <a href="index.php" class="nav-brand">Car Workshop</a>
         <div class="nav-items">
             <span>Welcome, Admin</span>
             <a href="logout.php" class="btn btn-logout">Logout</a>
@@ -108,6 +108,10 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
         </div>
     </div>
 
+
+    <footer>
+        <p>&copy; 2024 Car Workshop. All rights reserved.</p>
+    </footer>    
     <script src="script.js"></script>
 </body>
 </html>
