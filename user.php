@@ -38,7 +38,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-brand">Car Workshop</div>
+        <a href="index.php" class="nav-brand">Car Workshop</a>
         <div class="nav-items">
             <span>Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
             <a href="logout.php" class="btn btn-logout">Logout</a>

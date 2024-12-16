@@ -30,7 +30,7 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-brand">Car Workshop Admin</div>
+        <li><a href="index.html" class="btn btn-secondary" id="viewHomeBtn">Home</a></li>
         <div class="nav-items">
             <span>Welcome, Admin</span>
             <a href="logout.php" class="btn btn-logout">Logout</a>

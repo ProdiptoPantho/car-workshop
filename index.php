@@ -20,10 +20,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 </head>
 <body>
     <header class="navbar">
-        <div class="nav-brand">Car Workshop</div>
+        <a href="index.php" class="nav-brand">Car Workshop</a>
         <nav class="nav-items">
-            <a href="login.php" class="btn">Login</a>
-            <a href="register.php" class="btn">Register</a>
+            <a href="login.php" class="btn btn-primary">Login</a>
+            <a href="register.php" class="btn btn-primary">Register</a>
         </nav>
     </header>
 

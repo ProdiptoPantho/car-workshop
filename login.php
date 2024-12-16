@@ -73,6 +73,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+<header class="navbar">
+        <a href="index.php" class="nav-brand">Car Workshop</a>
+        <nav class="nav-items">
+            <a href="login.php" class="btn">Login</a>
+            <a href="register.php" class="btn">Register</a>
+        </nav>
+    </header>
     <div class="login-container">
         <div class="login-box">
             <h2>Login</h2>
