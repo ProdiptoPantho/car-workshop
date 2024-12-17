@@ -8,12 +8,20 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION[
 }
 
 // Get available mechanics
-$mechanics_query = "SELECT m.id, m.name, m.max_appointments, 
-    (SELECT COUNT(*) FROM appointments 
-     WHERE mechanic_id = m.id AND appointment_date = CURDATE()) as current_appointments 
+$mechanics_query = "SELECT m.id, m.name, 
+    (SELECT COUNT(*) 
+     FROM appointments a 
+     WHERE a.mechanic_id = m.id
+     AND a.appointment_date = ? 
+     AND a.status != 'cancelled') as booked_slots
     FROM mechanics m 
     WHERE m.status = 'active'";
-$mechanics_result = mysqli_query($conn, $mechanics_query);
+
+$stmt = mysqli_prepare($conn, $mechanics_query);
+$selected_date = isset($_POST['appointment_date']) ? $_POST['appointment_date'] : date('Y-m-d');
+mysqli_stmt_bind_param($stmt, "s", $selected_date);
+mysqli_stmt_execute($stmt);
+$mechanics_result = mysqli_stmt_get_result($stmt);
 
 // Get user's appointments
 $user_appointments_query = "SELECT a.*, m.name as mechanic_name 
@@ -51,7 +59,7 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                 <h2>Book New Appointment</h2>
                 <form id="appointmentForm" action="appointment.php" method="post">
                     <div class="form-group">
-                        <input type="text" name="client_name" value="<?php echo $_SESSION["username"]; ?>">
+                        <input type="text" name="client_name" value="<?php echo $_SESSION["username"]; ?>"readonly>
                     </div>
                     <div class="form-group">
                         <input type="text" name="address" placeholder="Address" required>
@@ -66,13 +74,13 @@ $user_appointments_result = mysqli_stmt_get_result($stmt);
                         <input type="text" name="car_engine" placeholder="Car Engine Number" required>
                     </div>
                     <div class="form-group">
-                        <input type="date" name="appointment_date" required min="<?php echo date('d-m-Y'); ?>">
+                        <input type="date" name="appointment_date" required min="<?php echo date('Y-m-d'); ?>">
                     </div>
                     <div class="form-group">
                         <select name="mechanic_id" required>
                             <option value="">Select Mechanic</option>
                             <?php while($mechanic = mysqli_fetch_assoc($mechanics_result)): ?>
-                                <?php $available_slots = $mechanic['max_appointments'] - $mechanic['current_appointments']; ?>
+                                <?php $available_slots = max(0, 4 - $mechanic['booked_slots']); ?>
                                 <option value="<?php echo $mechanic['id']; ?>" 
                                     <?php echo $available_slots <= 0 ? 'disabled' : ''; ?>>
                                     <?php echo $mechanic['name']; ?> 

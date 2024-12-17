@@ -215,10 +215,14 @@ html, body {
     flex: 1;
 }
 
-.landing-container,
 .login-container {
     flex: 1;
 }
+
+.dashboard-container {
+    flex: 1;
+}
+
 
 /* Footer styles */
 footer {

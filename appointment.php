@@ -26,19 +26,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // Check if mechanic has available slots
-    $check_mechanic_query = "SELECT COUNT(*) as appointment_count FROM appointments 
-        WHERE mechanic_id = ? AND appointment_date = ?";
-    $stmt = mysqli_prepare($conn, $check_mechanic_query);
-    mysqli_stmt_bind_param($stmt, "is", $mechanic_id, $appointment_date);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $row = mysqli_fetch_assoc($result);
+$check_mechanic_query = "SELECT COUNT(*) as booked_slots 
+FROM appointments 
+WHERE mechanic_id = ? 
+AND appointment_date = ? 
+AND status != 'cancelled'";
 
-    if($row['appointment_count'] >= 4){
-        $_SESSION['error'] = "Selected mechanic is fully booked for this date.";
-        header("location: user.php");
-        exit;
-    }
+$stmt = mysqli_prepare($conn, $check_mechanic_query);
+mysqli_stmt_bind_param($stmt, "is", $mechanic_id, $appointment_date);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$row = mysqli_fetch_assoc($result);
+
+if($row['booked_slots'] >= 4){
+    $_SESSION['error'] = "Selected mechanic is fully booked for this date.";
+    header("location: user.php");
+    exit;
+}
+
 
     // Insert appointment
     $insert_query = "INSERT INTO appointments (client_name, address, phone, car_license, 
