@@ -28,10 +28,11 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     </header>
 
     <div class="landing-container">
-        <div class="content-wrapper">
-            <h1>Welcome to Car Workshop</h1>
-            <p>Book your car service appointment online</p>   
-        </div>
+    <div class="content-wrapper">
+        <h1>Welcome to Car Workshop</h1>
+        <p>Book your car service appointment online</p>
+        <a href="login.php" class="btn btn-primary">Get Started</a>
+    </div>
     </div>
 
     <footer>
