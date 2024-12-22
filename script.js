@@ -36,32 +36,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const editStatusSelects = document.querySelectorAll('.edit-status');
     const deleteButtons = document.querySelectorAll('.btn-delete');
 
+    // Generic update function with POST fallback
+    async function updateAppointment(action, id, value, additionalData = {}) {
+        try {
+            // Try PUT first
+            let response = await fetch('appointment.php', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: action,
+                    id: id,
+                    ...additionalData
+                })
+            });
+
+            // If PUT fails, try POST fallback
+            if (!response.ok) {
+                const formData = new FormData();
+                formData.append('action', action);
+                formData.append('id', id);
+                for (let key in additionalData) {
+                    formData.append(key, additionalData[key]);
+                }
+
+                response = await fetch('appointment.php', {
+                    method: 'POST',
+                    body: formData
+                });
+            }
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.message || 'Operation failed');
+            }
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Update appointment date
     editDateInputs.forEach(input => {
         input.addEventListener('change', async function() {
-            const id = this.dataset.id;
-            const date = this.value;
-            
             try {
-                const response = await fetch('appointment.php', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'update_date',
-                        id: id,
-                        date: date
-                    })
+                await updateAppointment('update_date', this.dataset.id, this.value, {
+                    date: this.value
                 });
-                
-                const data = await response.json();
-                if(data.success) {
-                    showNotification('Date updated successfully');
-                }
+                showNotification('Date updated successfully');
             } catch(error) {
                 console.error('Error:', error);
-                showNotification('Error updating date', 'error');
+                showNotification(`Error updating date: ${error.message}`, 'error');
             }
         });
     });
@@ -69,29 +100,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update mechanic
     editMechanicSelects.forEach(select => {
         select.addEventListener('change', async function() {
-            const id = this.dataset.id;
-            const mechanicId = this.value;
-            
             try {
-                const response = await fetch('appointment.php', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'update_mechanic',
-                        id: id,
-                        mechanic_id: mechanicId
-                    })
+                await updateAppointment('update_mechanic', this.dataset.id, this.value, {
+                    mechanic_id: this.value
                 });
-                
-                const data = await response.json();
-                if(data.success) {
-                    showNotification('Mechanic updated successfully');
-                }
+                showNotification('Mechanic updated successfully');
             } catch(error) {
                 console.error('Error:', error);
-                showNotification('Error updating mechanic', 'error');
+                showNotification(`Error updating mechanic: ${error.message}`, 'error');
             }
         });
     });
@@ -99,29 +115,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update status
     editStatusSelects.forEach(select => {
         select.addEventListener('change', async function() {
-            const id = this.dataset.id;
-            const status = this.value;
-            
             try {
-                const response = await fetch('appointment.php', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'update_status',
-                        id: id,
-                        status: status
-                    })
+                await updateAppointment('update_status', this.dataset.id, this.value, {
+                    status: this.value
                 });
-                
-                const data = await response.json();
-                if(data.success) {
-                    showNotification('Status updated successfully');
-                }
+                showNotification('Status updated successfully');
             } catch(error) {
                 console.error('Error:', error);
-                showNotification('Error updating status', 'error');
+                showNotification(`Error updating status: ${error.message}`, 'error');
             }
         });
     });
@@ -129,43 +130,70 @@ document.addEventListener('DOMContentLoaded', function() {
     // Delete appointment
     deleteButtons.forEach(button => {
         button.addEventListener('click', async function() {
-            if(confirm('Are you sure you want to delete this appointment?')) {
-                const id = this.dataset.id;
-                
-                try {
-                    const response = await fetch('appointment.php', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            id: id
-                        })
+            if(!confirm('Are you sure you want to delete this appointment?')) {
+                return;
+            }
+
+            const row = this.closest('tr');
+            try {
+                // Try DELETE first
+                let response = await fetch('appointment.php', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: this.dataset.id
+                    })
+                });
+
+                // If DELETE fails, try POST fallback
+                if (!response.ok) {
+                    const formData = new FormData();
+                    formData.append('action', 'delete');
+                    formData.append('id', this.dataset.id);
+
+                    response = await fetch('appointment.php', {
+                        method: 'POST',
+                        body: formData
                     });
-                    
-                    const data = await response.json();
-                    if(data.success) {
-                        this.closest('tr').remove();
-                        showNotification('Appointment deleted successfully');
-                    }
-                } catch(error) {
-                    console.error('Error:', error);
-                    showNotification('Error deleting appointment', 'error');
                 }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.message || 'Delete failed');
+                }
+
+                row.remove();
+                showNotification('Appointment deleted successfully');
+            } catch(error) {
+                console.error('Error:', error);
+                showNotification(`Error deleting appointment: ${error.message}`, 'error');
             }
         });
     });
 
-    // Notification function
+    // Enhanced notification function with better visibility
     function showNotification(message, type = 'success') {
         const notification = document.createElement('div');
         notification.className = `alert alert-${type} fade-in`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '1000';
         notification.textContent = message;
         
         document.body.appendChild(notification);
         
         setTimeout(() => {
-            notification.remove();
+            notification.classList.add('fade-out');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
         }, 3000);
     }
 
@@ -173,4 +201,28 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.add('fade-in');
     });
+});
+
+document.getElementById('refreshData').addEventListener('click', function() {
+    const status = document.getElementById('statusFilter').value;
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (status) {
+        urlParams.set('status', status);
+    } else {
+        urlParams.delete('status');
+    }
+
+    // Reload the page with the updated URL
+    window.location.href = window.location.pathname + '?' + urlParams.toString();
+});
+
+// Ensure the correct filter is selected on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    
+    if (status) {
+        document.getElementById('statusFilter').value = status;
+    }
 });

@@ -27,6 +27,10 @@ SET time_zone = "+00:00";
 -- Table structure for table `appointments`
 --
 
+CREATE DATABASE car_workshop;
+USE car_workshop;
+
+
 CREATE TABLE `appointments` (
   `id` int(11) NOT NULL,
   `client_name` varchar(100) NOT NULL,
