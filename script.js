@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Car engine validation
-            if(carEngine.value.length < 5) {
+            if (carEngine.value.length < 5 || !/^\d+$/.test(carEngine.value)) {
                 e.preventDefault();
-                alert('Please enter a valid car engine number');
+                alert('Please enter a valid car engine number (at least 5 digits and numbers only)');
                 return;
-            }
+            } 
         });
     }
 
