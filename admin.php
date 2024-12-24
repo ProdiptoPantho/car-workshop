@@ -109,7 +109,10 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
                                         <th>Mechanic</th>
                                         <th>Status</th>
                                         <th>Action</th>
+<<<<<<< HEAD
                                         <th></th>
+=======
+>>>>>>> f9dced423438deb0dc4703b61423d14624fc79c3
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,6 +125,7 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
                                             <td><?php echo htmlspecialchars($appointment['mechanic_name']); ?></td>
                                             <td><?php echo htmlspecialchars($appointment['status']); ?></td>
                                             <td>
+<<<<<<< HEAD
                                                 <form method="POST" action="update_status.php">
                                                     <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>">
                                                     <select name="status" onchange="this.form.submit()">
@@ -136,6 +140,10 @@ $mechanics_result = mysqli_query($conn, $mechanics_query);
                                             <td>
                                                 <a href="edit.php?id=<?php echo $appointment['id']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to Edit this appointment?');">
                                                     <i class="fas fa-trash-alt"></i> Edit
+=======
+                                                <a href="delete_appointment.php?id=<?php echo $appointment['id']; ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this appointment?');">
+                                                    <i class="fas fa-trash-alt"></i> Delete
+>>>>>>> f9dced423438deb0dc4703b61423d14624fc79c3
                                                 </a>
                                             </td>
                                         </tr>
