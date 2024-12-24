@@ -16,7 +16,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Ubuntu Mono', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     background-color: var(--background-color);
     color: var(--text-color);
@@ -46,16 +46,42 @@ body {
 }
 
 /* Container styles */
-.landing-container,
+.landing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    text-align: center;
+    padding: 4rem 2rem;
+    box-shadow: var(--shadow);
+    animation: fadeIn 1s ease-in-out;
+}
 .login-container,
 .dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     max-width: 1200px;
+    max-height: 100vh;
     margin: 2rem auto;
     padding: 1rem;
     background-color: var(--white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
 }
+
+.content-wrapper p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+.content-wrapper h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
 
 /* Form styles */
 .form-group {
@@ -93,12 +119,17 @@ select:focus {
 }
 
 .btn-primary {
-    background-color: var(--secondary-color);
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    background: var(--secondary-color);
+    transition: background 0.3s, transform 0.2s;
 }
 
+
 .btn-primary:hover {
-    background-color: darken(var(--secondary-color), 10%);
-    transform: translateY(-2px);
+    background: var(--accent-color);
+    transform: translateY(-4px);
 }
 
 .btn-danger {
@@ -112,6 +143,16 @@ select:focus {
 
 .btn-logout {
     background-color: var(--accent-color);
+}
+
+.btn-delete {
+    color: red;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn-delete:hover {
+    color: darkred;
 }
 
 /* Table styles */
@@ -233,3 +274,21 @@ footer {
     width: 100%;
     box-shadow: var(--shadow);
 }
+
+
+.alert {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.error {
+    background-color: #f44336;
+    color: white;
+}
+
